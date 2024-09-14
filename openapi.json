@@ -1,0 +1,333 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Figures - OpenAPI",
+    "description": "API для работы с фигурами",
+    "version": "1.0.11"
+  },
+  "paths": {
+    "/api/v1/figures": {
+      "post": {
+        "tags": [
+          "figures"
+        ],
+        "description": "Предназначен для добавления новой фигуры на лист бумаги.",
+        "requestBody": {
+          "description": "Фигура не может иметь меньше трех вершин и трех ребер!",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Figure"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Успешный ответ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Ошибка переданных данных",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "figures"
+        ],
+        "description": "Предназначен для получения данных фигур на листе.",
+        "responses": {
+          "200": {
+            "description": "Успешный ответ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetFigure"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/figures/{id}": {
+      "put": {
+        "tags": [
+          "figures"
+        ],
+        "description": "Предназначен для редактирования данных фигуры.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Figure"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Успешный ответ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Ошибка переданных данных",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "figures"
+        ],
+        "description": "Предназначен для удаления фигуры с листа.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешный ответ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Ошибка переданных данных",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Фигура не найдена",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Figure": {
+        "type": "object",
+        "properties": {
+          "color": {
+            "type": "string",
+            "example": "#FFFFFFF"
+          },
+          "points": {
+            "type": "array",
+            "minItems": 3,
+            "description": "Значения по умолчанию: A(48,32), B(48,58), C(70,45)",
+            "items": {
+              "$ref": "#/components/schemas/Coordinate"
+            }
+          },
+          "edges": {
+            "type": "array",
+            "minItems": 3,
+            "items": {
+              "$ref": "#/components/schemas/Edge"
+            }
+          },
+          "layer": {
+            "type": "integer",
+            "default": 0
+          }
+        }
+      },
+      "GetFigure": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Figure"
+        }
+      },
+      "Coordinate": {
+        "type": "object",
+        "properties": {
+          "x": {
+            "type": "number",
+            "default": 48
+          },
+          "y": {
+            "type": "number",
+            "default": 32
+          }
+        }
+      },
+      "Edge": {
+        "type": "object",
+        "properties": {
+          "point_one_id": {
+            "type": "integer",
+            "example": 1
+          },
+          "point_two_id": {
+            "type": "integer",
+            "example": 2
+          }
+        }
+      },
+      "SuccessResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": false
+          },
+          "message": {
+            "type": "string",
+            "example": "Invalid request"
+          }
+        }
+      },
+      "InternalServerResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": false
+          },
+          "message": {
+            "type": "string",
+            "example": "Internal Server Error"
+          }
+        }
+      },
+      "NotFoundResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": false
+          },
+          "message": {
+            "type": "string",
+            "example": "Not Found"
+          }
+        }
+      }
+    },
+    "requestBodies": {
+      "figures": {
+        "description": "фигура",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Figure"
+            }
+          }
+        }
+      }
+    }
+  }
+}
