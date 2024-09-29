@@ -103,6 +103,7 @@
           }
         ],
         "requestBody": {
+          "description": "Фигура не может иметь меньше трех вершин и трех ребер!",
           "content": {
             "application/json": {
               "schema": {
